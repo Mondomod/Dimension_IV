@@ -4,27 +4,17 @@
 # the generated LV2 bundle.
 # --------------------------------------------------------------
 
-DIMENSION_IV_VERSION = ed9db523859437cba61d05d3fd08fd579a4a4993
 DIMENSION_IV_SITE = https://github.com/Mondomod/Dimension_IV.git
 DIMENSION_IV_SITE_METHOD = git
 DIMENSION_IV_GIT_SUBMODULES = y
-DIMENSION_IVBUNDLES = Dimension_IV.lv2
+DIMENSION_IV_BUNDLES = Dimension_IV.lv2
 
-# Directory containing your custom LV2 files
-LV2_ASSETS ?= lv2
 
-# Find all generated LV2 bundles
-LV2_BUNDLES := $(wildcard bin/*.lv2)
+# needed for submodules support
+DIMENSION_IV_PRE_DOWNLOAD_HOOKS += MOD_PLUGIN_BUILDER_DOWNLOAD_WITH_SUBMODULES
 
-copy-lv2:
-	@for bundle in $(LV2_BUNDLES); do \
-		echo "Packaging $$bundle"; \
-		cp -f $(LV2_ASSETS)/*.ttl "$$bundle/"; \
-		cp -rf $(LV2_ASSETS)/modgui "$$bundle/" 2>/dev/null || true; \
-		cp -f $(LV2_ASSETS)/*.html "$$bundle/" 2>/dev/null || true; \
-		cp -f $(LV2_ASSETS)/*.css "$$bundle/" 2>/dev/null || true; \
-		cp -f $(LV2_ASSETS)/*.js "$$bundle/" 2>/dev/null || true; \
-		cp -rf $(LV2_ASSETS)/images "$$bundle/" 2>/dev/null || true; \
-	done
+define DIMENSION_IV_INSTALL_TARGET_CMDS
+	cp -rL $(@D)/Dimension_IV.lv2 $(TARGET_DIR)/usr/lib/lv2/
+endef
 
-.PHONY: copy-lv2
+$(eval $(cmake-package))
