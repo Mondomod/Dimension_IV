@@ -4,7 +4,7 @@
 #
 ######################################
 
-DIMENSION_IV_VERSION = $(shell git rev-parse HEAD)
+DIMENSION_IV_VERSION = bf8bdaa55e09daa050f167e75e215be970d7925d
 DIMENSION_IV_SITE = https://github.com/Mondomod/Dimension_IV.git
 DIMENSION_IV_SITE_METHOD = git
 DIMENSION_IV_CONF_OPTS = -DBUILD_GUI="Off"
