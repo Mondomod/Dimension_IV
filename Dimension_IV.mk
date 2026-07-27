@@ -1,31 +1,21 @@
-#!/usr/bin/make -f
-# Makefile for MOD Audio cloud builder
-# Dimension_IV LV2 Plugin
-# Created for MOD cloud builder submission
+######################################
+#
+# Dimension_IV
+#
+######################################
 
-# Default target
-all: build
+DIMENSION_IV_VERSION = $(shell git rev-parse HEAD)
+DIMENSION_IV_SITE = https://github.com/Mondomod/Dimension_IV.git
+DIMENSION_IV_SITE_METHOD = git
+DIMENSION_IV_CONF_OPTS = -DBUILD_GUI="Off"
+DIMENSION_IV_BUNDLES = Dimension_IV.lv2
 
-# Build the plugin
-build:
-	$(MAKE) -C . plugin gen
+define DIMENSION_IV_BUILD_CMDS
+	$(MAKE) -C $(@D) all
+endef
 
-# Install target - creates Dimension_IV.lv2 directory with all necessary files
-install: build
-	@echo "Building Dimension_IV.lv2 package..."
-	@mkdir -p Dimension_IV.lv2
-	@echo "Copying compiled plugin files..."
-	@cp -r bin/Dimension_IV.lv2/* Dimension_IV.lv2/ 2>/dev/null || true
-	@echo "Copying LV2 metadata files..."
-	@cp lv2/*.ttl Dimension_IV.lv2/ 2>/dev/null || true
-	@echo "Copying MOD GUI files..."
-	@cp -r lv2/modgui Dimension_IV.lv2/ 2>/dev/null || true
-	@echo "Dimension_IV.lv2 package created successfully!"
+define DIMENSION_IV_INSTALL_TARGET_CMDS
+	cp -rL $(@D)/bin/Dimension_IV.lv2 $(TARGET_DIR)/usr/lib/lv2/
+endef
 
-# Clean build artifacts
-clean:
-	$(MAKE) -C . clean
-	rm -rf Dimension_IV.lv2
-
-# Phony targets
-.PHONY: all build install clean
+$(eval $(cmake-package))
